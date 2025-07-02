@@ -1,0 +1,6 @@
+@TE.TT.MarketApi_HostAddress = http://localhost:5052
+
+GET {{TE.TT.MarketApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

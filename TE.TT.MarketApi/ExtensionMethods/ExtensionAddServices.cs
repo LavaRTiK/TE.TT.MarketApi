@@ -8,7 +8,14 @@ namespace TE.TT.MarketApi.ExtensionMethods
     {
         public static void AddService(this IServiceCollection service)
         {
-            service.AddSingleton<HttpClient>();
+            service.AddHttpClient("TokenClient", client =>
+            {
+                client.BaseAddress = new Uri("https://platform.fintacharts.com/identity/realms/fintatech/protocol/openid-connect/token");
+            });
+            service.AddHttpClient("ApiClient", client =>
+            {
+                client.BaseAddress = new Uri("https://platform.fintacharts.com/api/instruments/v1/");
+            });
             service.AddSingleton<IControlTokenService,ControlTokenService>();
             service.AddScoped<IAssetRepositoryService, AssetRepositoryService>();
             service.AddSingleton<IFintaApiService,FintaApiService>();

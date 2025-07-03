@@ -15,10 +15,9 @@ namespace TE.TT.MarketApi.Service
     {
         private readonly HttpClient _httpClient;
         private readonly IControlTokenService _tokenService;
-        public FintaApiService(HttpClient httpClient, IControlTokenService tokenService)
+        public FintaApiService(IHttpClientFactory httpClientFactory, IControlTokenService tokenService)
         {
-            _httpClient = httpClient;
-            _httpClient.BaseAddress = new Uri("https://platform.fintacharts.com/api/instruments/v1/");
+            _httpClient = httpClientFactory.CreateClient("ApiClient");
             _tokenService = tokenService;
         }
         public async Task<AssetsDto> FetchAllData()
@@ -26,16 +25,17 @@ namespace TE.TT.MarketApi.Service
             try
             {
                 string token = await _tokenService.GetValidToken();
+                if (string.IsNullOrWhiteSpace(token)) return new AssetsDto();
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 var responseSize = await _httpClient.GetStringAsync($"instruments?size=1");
                 if (string.IsNullOrWhiteSpace(responseSize))
                 {
                     return new AssetsDto();
                 }
-
                 var result = JsonSerializer.Deserialize<pagingDto>(responseSize);
                 int dataCount = result.Items;
                 token = await _tokenService.GetValidToken();
+                if (string.IsNullOrWhiteSpace(token)) return new AssetsDto();
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 var responseData = await _httpClient.GetStringAsync($"instruments?size={dataCount}");
                 if (string.IsNullOrWhiteSpace(responseData))

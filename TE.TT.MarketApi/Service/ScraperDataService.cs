@@ -16,14 +16,24 @@ namespace TE.TT.MarketApi.Service
             //update database
             while (!stoppingToken.IsCancellationRequested)
             {
+                await Console.Out.WriteLineAsync("start backservice");
                 try
                 {
                     using (var scope = _service.CreateScope())
                     {
                         var assetRepository = scope.ServiceProvider.GetRequiredService<IAssetRepositoryService>();
                         var data = await _fintaApiService.FetchAllData();
-                        await assetRepository.UpdateAssetRepository(data);
+                        if (data != null && data.ListAssets != null)
+                        {
+                            await assetRepository.UpdateAssetRepository(data);
+                        }
+                        else
+                        {
+                            Console.WriteLine("BackService Data:null");
+                        }
+                        //await assetRepository.UpdateAssetRepository(data);
                     }
+                    await Console.Out.WriteLineAsync("Update Database");
                 }
                 catch (Exception e)
                 {

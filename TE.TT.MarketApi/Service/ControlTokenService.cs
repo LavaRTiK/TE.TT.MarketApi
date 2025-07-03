@@ -12,14 +12,13 @@ namespace TE.TT.MarketApi.Service
         private string? _refreshToken;
         private DateTime? _tokenExpires;
         private DateTime? _refreshTokenExpires;
-        private readonly HttpClient _httpClient;
+        private HttpClient _httpClient;
         private readonly string _username;
         private readonly string _password;
-        public  ControlTokenService(HttpClient httpClient,IConfiguration configuration)
+        public  ControlTokenService(IHttpClientFactory httpClientFactory,IConfiguration configuration)
         {
-            _httpClient = httpClient;
-            _httpClient.BaseAddress = new Uri("https://platform.fintacharts.com/identity/realms/fintatech/protocol/openid-connect/token");
-            _username = configuration.GetValue<string>("username") ?? Environment.GetEnvironmentVariable("USERNAME");
+            _httpClient = httpClientFactory.CreateClient("TokenClient");
+            _username = configuration.GetValue<string>("login") ?? Environment.GetEnvironmentVariable("LOGIN");
             if (_username is null)
             {
                 throw new Exception("user Empty");
@@ -35,15 +34,34 @@ namespace TE.TT.MarketApi.Service
         {
             try
             {
-                var registerTokenDto = new RegisterTokenDto
+                var requstData = new Dictionary<string, string>()
                 {
-                    GrandType = "password",
-                    ClientId = "app-cli",
-                    Username = _username,
-                    Password = _password
+                    {"grant_type","password"},
+                    {"client_id","app-cli"},
+                    {"username",_username},
+                    {"password",_password}
                 };
-                var response = await _httpClient.PostAsJsonAsync("", registerTokenDto);
+                var contentData = new FormUrlEncodedContent(requstData);
+                //var registerTokenDto = new RegisterTokenDto
+                //{
+                //    GrandType = "password",
+                //    ClientId = "app-cli",
+                //    Username = _username,
+                //    Password = _password
+                //};
+                //var response = await _httpClient.PostAsJsonAsync("", registerTokenDto);
+                var response = await _httpClient.PostAsync("", contentData);
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorBody = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine("isSuccess"+errorBody + "fail:" + response.StatusCode);
+                    return;
+                }
                 var content = JsonSerializer.Deserialize<ResponseTokensDto>(await response.Content.ReadAsStringAsync());
+                if (content is null)
+                {
+                    return;
+                }
                 _token = content.Token;
                 _tokenExpires = DateTime.Now.AddSeconds(content.TokenExpires);
                 _refreshToken = content.RefreshToken;
@@ -51,6 +69,8 @@ namespace TE.TT.MarketApi.Service
             }
             catch (Exception e)
             {
+                Console.WriteLine("password:" + _password);
+                Console.WriteLine("username:" + _username);
                 Console.WriteLine("Error FirstStart:"+e);
             }
         }
@@ -114,14 +134,15 @@ namespace TE.TT.MarketApi.Service
                 {
                     try
                     {
-                        var registerTokenDto = new RegisterTokenDto
+                        var requstData = new Dictionary<string, string>()
                         {
-                            GrandType = "password",
-                            ClientId = "app-cli",
-                            Username = _username,
-                            Password = _password
+                            {"grand_type","password"},
+                            {"client_id","app-cli"},
+                            {"username",_username},
+                            {"password",_password}
                         };
-                        var response = await _httpClient.PostAsJsonAsync("", registerTokenDto);
+                        var contentData = new FormUrlEncodedContent(requstData);
+                        var response = await _httpClient.PostAsync("", contentData);
                         if (!response.IsSuccessStatusCode)
                         {
                             return "";
@@ -144,13 +165,21 @@ namespace TE.TT.MarketApi.Service
                 {
                     try
                     {
-                        var testObj = new UpdateTokenDto
+                        //var testObj = new UpdateTokenDto
+                        //{
+                        //    GrantType = "refresh_token",
+                        //    ClientId = "app-cli",
+                        //    RefreshToken = _refreshToken!
+                        //};
+                        var requstData = new Dictionary<string, string>()
                         {
-                            GrantType = "refresh_token",
-                            ClientId = "app-cli",
-                            RefreshToken = _refreshToken!
+                            {"grand_type","refresh_token"},
+                            {"client_id","app-cli"},
+                            {"refresh_token",_refreshToken}
+
                         };
-                        var response = await _httpClient.PostAsJsonAsync("", testObj);
+                        var contentData = new FormUrlEncodedContent(requstData);
+                        var response = await _httpClient.PostAsync("", contentData);
                         if (!response.IsSuccessStatusCode)
                         {
                             return "";
@@ -164,7 +193,7 @@ namespace TE.TT.MarketApi.Service
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine("Error Update Token" +ex);
+                        Console.WriteLine("Error Update Token"+ex);
                     }
                 }
             }

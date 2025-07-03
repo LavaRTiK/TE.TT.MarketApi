@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using TE.TT.MarketApi.Abstarct;
 using TE.TT.MarketApi.Database;
 using TE.TT.MarketApi.ExtensionMethods;
+using TE.TT.MarketApi.Repository;
+using TE.TT.MarketApi.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 

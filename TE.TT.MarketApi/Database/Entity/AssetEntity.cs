@@ -14,7 +14,7 @@
         public MappingOanda? Oanda { get; set; }
         public Profile? Profile { get; set; }
     }
-    public abstract class MappingBase : BaseEntity
+    public class MappingSimulation : BaseEntity
     {
         public string? Symbol { get; set; }
         public string? Exchange { get; set; }
@@ -24,19 +24,54 @@
         public Guid? AssetId { get; set; }
         public AssetEntity? Asset { get; set; }
     }
-    public class MappingSimulation : MappingBase { }
-    public class MappingAlpaca : MappingBase { }
-    public class MappingDxfeed : MappingBase { }
-    public class MappingOanda : MappingBase { }
+
+    public class MappingAlpaca : BaseEntity
+    {
+        public string? Symbol { get; set; }
+        public string? Exchange { get; set; }
+        public int? DefualtOrderSize { get; set; }
+        public int? MaxOrderSize { get; set; }
+        public TradingHours? TradingHours { get; set; }
+        public Guid? AssetId { get; set; }
+        public AssetEntity? Asset { get; set; }
+    }
+
+    public class MappingDxfeed : BaseEntity
+    {
+        public string? Symbol { get; set; }
+        public string? Exchange { get; set; }
+        public int? DefualtOrderSize { get; set; }
+        public int? MaxOrderSize { get; set; }
+        public TradingHours? TradingHours { get; set; }
+        public Guid? AssetId { get; set; }
+        public AssetEntity? Asset { get; set; }
+    }
+
+    public class MappingOanda : BaseEntity
+    {
+        public string? Symbol { get; set; }
+        public string? Exchange { get; set; }
+        public int? DefualtOrderSize { get; set; }
+        public int? MaxOrderSize { get; set; }
+        public TradingHours? TradingHours { get; set; }
+        public Guid? AssetId { get; set; }
+        public AssetEntity? Asset { get; set; }
+    }
     public class TradingHours : BaseEntity
     {
         public string? RegularStart { get; set; }
         public string? RegularEnd { get; set; }
         public string? ElectronicStart { get; set; }
         public string? ElectronicEnd { get; set; }
-
-        public Guid? MappingId { get; set; }
-        public MappingBase? Mapping { get; set; }
+        //test
+        public Guid? SimulationMappingId { get; set; }
+        public MappingSimulation? SimulationMapping { get; set; }
+        public Guid? AlpacaMappingId { get; set; }
+        public MappingAlpaca? AlpacaMapping { get; set; }
+        public Guid? DxfeedMappingId { get; set; }
+        public MappingDxfeed? DxfeedMapping { get; set; }
+        public Guid? OandaMappingId { get; set; }
+        public MappingOanda? OandaMapping { get; set; }
     }
     public class Profile : BaseEntity
     {

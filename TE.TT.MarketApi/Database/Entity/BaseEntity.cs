@@ -6,5 +6,6 @@ namespace TE.TT.MarketApi.Database.Entity
     {
         [Key]
         public Guid Id { get; set; }
+        public DateTime UpdateData { get; set; }
     }
 }

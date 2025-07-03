@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TE.TT.MarketApi.Database;
 
@@ -11,9 +12,11 @@ using TE.TT.MarketApi.Database;
 namespace TE.TT.MarketApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20250703092801_edit")]
+    partial class edit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,25 +32,27 @@ namespace TE.TT.MarketApi.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Currency")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Exchange")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Kind")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Symbol")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<double?>("TickSize")
-                        .HasColumnType("double");
-
-                    b.Property<DateTime>("UpdateData")
-                        .HasColumnType("datetime(6)");
+                    b.Property<decimal>("TickSize")
+                        .HasColumnType("decimal(65,30)");
 
                     b.HasKey("Id");
 
@@ -60,23 +65,20 @@ namespace TE.TT.MarketApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<int?>("IndustryGroupId")
+                    b.Property<int>("IndustryGroupId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IndustryId")
+                    b.Property<int>("IndustryId")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("ProfileId")
+                    b.Property<Guid>("ProfileId")
                         .HasColumnType("char(36)");
 
-                    b.Property<int?>("SectorId")
+                    b.Property<int>("SectorId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SubIndustryId")
+                    b.Property<int>("SubIndustryId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdateData")
-                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 
@@ -92,10 +94,10 @@ namespace TE.TT.MarketApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("AssetId")
+                    b.Property<Guid>("AssetId")
                         .HasColumnType("char(36)");
 
-                    b.Property<int?>("DefualtOrderSize")
+                    b.Property<int>("DefualtOrderSize")
                         .HasColumnType("int");
 
                     b.Property<string>("Discriminator")
@@ -104,19 +106,18 @@ namespace TE.TT.MarketApi.Migrations
                         .HasColumnType("varchar(21)");
 
                     b.Property<string>("Exchange")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("MaxOrderSize")
+                    b.Property<int>("MaxOrderSize")
                         .HasColumnType("int");
 
                     b.Property<string>("Symbol")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<Guid?>("TradingHoursId")
+                    b.Property<Guid>("TradingHoursId")
                         .HasColumnType("char(36)");
-
-                    b.Property<DateTime>("UpdateData")
-                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 
@@ -135,17 +136,16 @@ namespace TE.TT.MarketApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("AssetId")
+                    b.Property<Guid>("AssetId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Location")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<DateTime>("UpdateData")
-                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 
@@ -162,22 +162,23 @@ namespace TE.TT.MarketApi.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("ElectronicEnd")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("ElectronicStart")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<Guid?>("MappingId")
+                    b.Property<Guid>("MappingId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("RegularEnd")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("RegularStart")
+                        .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<DateTime>("UpdateData")
-                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 
@@ -231,7 +232,9 @@ namespace TE.TT.MarketApi.Migrations
                 {
                     b.HasOne("TE.TT.MarketApi.Database.Entity.Profile", "Profile")
                         .WithOne("Gics")
-                        .HasForeignKey("TE.TT.MarketApi.Database.Entity.Gics", "ProfileId");
+                        .HasForeignKey("TE.TT.MarketApi.Database.Entity.Gics", "ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Profile");
                 });
@@ -240,7 +243,9 @@ namespace TE.TT.MarketApi.Migrations
                 {
                     b.HasOne("TE.TT.MarketApi.Database.Entity.TradingHours", "TradingHours")
                         .WithMany()
-                        .HasForeignKey("TradingHoursId");
+                        .HasForeignKey("TradingHoursId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("TradingHours");
                 });
@@ -249,7 +254,9 @@ namespace TE.TT.MarketApi.Migrations
                 {
                     b.HasOne("TE.TT.MarketApi.Database.Entity.AssetEntity", "Asset")
                         .WithOne("Profile")
-                        .HasForeignKey("TE.TT.MarketApi.Database.Entity.Profile", "AssetId");
+                        .HasForeignKey("TE.TT.MarketApi.Database.Entity.Profile", "AssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Asset");
                 });
@@ -258,7 +265,9 @@ namespace TE.TT.MarketApi.Migrations
                 {
                     b.HasOne("TE.TT.MarketApi.Database.Entity.MappingBase", "Mapping")
                         .WithOne()
-                        .HasForeignKey("TE.TT.MarketApi.Database.Entity.TradingHours", "MappingId");
+                        .HasForeignKey("TE.TT.MarketApi.Database.Entity.TradingHours", "MappingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Mapping");
                 });
@@ -267,7 +276,9 @@ namespace TE.TT.MarketApi.Migrations
                 {
                     b.HasOne("TE.TT.MarketApi.Database.Entity.AssetEntity", "Asset")
                         .WithOne("Aplace")
-                        .HasForeignKey("TE.TT.MarketApi.Database.Entity.MappingAplace", "AssetId");
+                        .HasForeignKey("TE.TT.MarketApi.Database.Entity.MappingAplace", "AssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Asset");
                 });
@@ -276,7 +287,9 @@ namespace TE.TT.MarketApi.Migrations
                 {
                     b.HasOne("TE.TT.MarketApi.Database.Entity.AssetEntity", "Asset")
                         .WithOne("Dxfeed")
-                        .HasForeignKey("TE.TT.MarketApi.Database.Entity.MappingDxfeed", "AssetId");
+                        .HasForeignKey("TE.TT.MarketApi.Database.Entity.MappingDxfeed", "AssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Asset");
                 });
@@ -285,7 +298,9 @@ namespace TE.TT.MarketApi.Migrations
                 {
                     b.HasOne("TE.TT.MarketApi.Database.Entity.AssetEntity", "Asset")
                         .WithOne("Oanda")
-                        .HasForeignKey("TE.TT.MarketApi.Database.Entity.MappingOanda", "AssetId");
+                        .HasForeignKey("TE.TT.MarketApi.Database.Entity.MappingOanda", "AssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Asset");
                 });
@@ -294,27 +309,35 @@ namespace TE.TT.MarketApi.Migrations
                 {
                     b.HasOne("TE.TT.MarketApi.Database.Entity.AssetEntity", "Asset")
                         .WithOne("Simulation")
-                        .HasForeignKey("TE.TT.MarketApi.Database.Entity.MappingSimulation", "AssetId");
+                        .HasForeignKey("TE.TT.MarketApi.Database.Entity.MappingSimulation", "AssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Asset");
                 });
 
             modelBuilder.Entity("TE.TT.MarketApi.Database.Entity.AssetEntity", b =>
                 {
-                    b.Navigation("Aplace");
+                    b.Navigation("Aplace")
+                        .IsRequired();
 
-                    b.Navigation("Dxfeed");
+                    b.Navigation("Dxfeed")
+                        .IsRequired();
 
-                    b.Navigation("Oanda");
+                    b.Navigation("Oanda")
+                        .IsRequired();
 
-                    b.Navigation("Profile");
+                    b.Navigation("Profile")
+                        .IsRequired();
 
-                    b.Navigation("Simulation");
+                    b.Navigation("Simulation")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TE.TT.MarketApi.Database.Entity.Profile", b =>
                 {
-                    b.Navigation("Gics");
+                    b.Navigation("Gics")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -15,7 +15,7 @@ namespace TE.TT.MarketApi.Service
         private readonly HttpClient _httpClient;
         private readonly string _username;
         private readonly string _password;
-        public ControlTokenService(HttpClient httpClient,IConfiguration configuration)
+        public  ControlTokenService(HttpClient httpClient,IConfiguration configuration)
         {
             _httpClient = httpClient;
             _httpClient.BaseAddress = new Uri("https://platform.fintacharts.com/identity/realms/fintatech/protocol/openid-connect/token");
@@ -28,6 +28,30 @@ namespace TE.TT.MarketApi.Service
             if (_password is null)
             {
                 throw new Exception("password Empty");
+            }
+        }
+
+        public async Task FirstStart()
+        {
+            try
+            {
+                var registerTokenDto = new RegisterTokenDto
+                {
+                    GrandType = "password",
+                    ClientId = "app-cli",
+                    Username = _username,
+                    Password = _password
+                };
+                var response = await _httpClient.PostAsJsonAsync("", registerTokenDto);
+                var content = JsonSerializer.Deserialize<ResponseTokensDto>(await response.Content.ReadAsStringAsync());
+                _token = content.Token;
+                _tokenExpires = DateTime.Now.AddSeconds(content.TokenExpires);
+                _refreshToken = content.RefreshToken;
+                _refreshTokenExpires = DateTime.Now.AddSeconds(content.RefreshTokenExpires);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error FirstStart:"+e);
             }
         }
         public void SetToken(string token, DateTime tokenExpires)
@@ -75,51 +99,76 @@ namespace TE.TT.MarketApi.Service
 
         public async Task<string> GetValidToken()
         {
+            if (string.IsNullOrWhiteSpace(_token) || _tokenExpires == null)
+            {
+                await FirstStart();
+                if (string.IsNullOrWhiteSpace(_token))
+                {
+                    return "";
+                }
+                return _token!;
+            }
             if (_tokenExpires <= DateTime.Now)
             {
                 if (_refreshTokenExpires <= DateTime.Now)
                 {
-                    var registerTokenDto = new RegisterTokenDto
+                    try
                     {
-                        GrandType = "password",
-                        ClientId = "app-cli",
-                        Username = _username,
-                        Password = _password
-                    };
-                    var response = await _httpClient.PostAsJsonAsync("", registerTokenDto);
-                    if (!response.IsSuccessStatusCode)
+                        var registerTokenDto = new RegisterTokenDto
+                        {
+                            GrandType = "password",
+                            ClientId = "app-cli",
+                            Username = _username,
+                            Password = _password
+                        };
+                        var response = await _httpClient.PostAsJsonAsync("", registerTokenDto);
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            return "";
+                        }
+
+                        var content =
+                            JsonSerializer.Deserialize<ResponseTokensDto>(await response.Content.ReadAsStringAsync());
+                        _token = content.Token;
+                        _tokenExpires = DateTime.Now.AddSeconds(content.TokenExpires);
+                        _refreshToken = content.RefreshToken;
+                        _refreshTokenExpires = DateTime.Now.AddSeconds(content.RefreshTokenExpires);
+                    }
+                    catch (Exception ex)
                     {
+                        Console.WriteLine("Error refresh Token Update:" + ex);
                         return "";
                     }
-                    var content =
-                        JsonSerializer.Deserialize<ResponseTokensDto>(await response.Content.ReadAsStringAsync());
-                    _token = content.Token;
-                    _tokenExpires = DateTime.Now.AddSeconds(content.TokenExpires);
-                    _refreshToken = content.RefreshToken;
-                    _refreshTokenExpires = DateTime.Now.AddSeconds(content.RefreshTokenExpires);
                 }
                 else
                 {
-                    var testObj = new UpdateTokenDto
+                    try
                     {
-                        GrantType = "refresh_token",
-                        ClientId = "app-cli",
-                        RefreshToken = _refreshToken
-                    };
-                    var response = await _httpClient.PostAsJsonAsync("", testObj);
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        return "";
+                        var testObj = new UpdateTokenDto
+                        {
+                            GrantType = "refresh_token",
+                            ClientId = "app-cli",
+                            RefreshToken = _refreshToken!
+                        };
+                        var response = await _httpClient.PostAsJsonAsync("", testObj);
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            return "";
+                        }
+                        var content =
+                            JsonSerializer.Deserialize<ResponseTokensDto>(await response.Content.ReadAsStringAsync());
+                        _token = content!.Token;
+                        _tokenExpires = DateTime.Now.AddSeconds(content.TokenExpires);
+                        _refreshToken = content.RefreshToken;
+                        _refreshTokenExpires = DateTime.Now.AddSeconds(content.RefreshTokenExpires);
                     }
-                    var content =
-                        JsonSerializer.Deserialize<ResponseTokensDto>(await response.Content.ReadAsStringAsync());
-                    _token = content.Token;
-                    _tokenExpires = DateTime.Now.AddSeconds(content.TokenExpires);
-                    _refreshToken = content.RefreshToken;
-                    _refreshTokenExpires = DateTime.Now.AddSeconds(content.RefreshTokenExpires);
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error Update Token" +ex);
+                    }
                 }
             }
-            return _token;
+            return _token!;
         }
     }
 }

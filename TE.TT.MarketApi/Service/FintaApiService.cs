@@ -21,12 +21,11 @@ namespace TE.TT.MarketApi.Service
             _httpClient.BaseAddress = new Uri("https://platform.fintacharts.com/api/instruments/v1/");
             _tokenService = tokenService;
         }
-
         public async Task<AssetsDto> FetchAllData()
         {
             try
             {
-                string token =await _tokenService.GetValidToken();
+                string token = await _tokenService.GetValidToken();
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 var responseSize = await _httpClient.GetStringAsync($"instruments?size=1");
                 if (string.IsNullOrWhiteSpace(responseSize))
@@ -43,6 +42,7 @@ namespace TE.TT.MarketApi.Service
                 {
                     return new AssetsDto();
                 }
+
                 var resultData = JsonSerializer.Deserialize<AssetsDto>(responseData);
                 if (resultData == null)
                 {
@@ -51,13 +51,11 @@ namespace TE.TT.MarketApi.Service
 
                 return resultData;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine("Ошибка в FetchAllData:" + ex.Message);
                 return new AssetsDto();
             }
-            //получить size после взять все 
-            //сделать Upsert
         }
     }
 }

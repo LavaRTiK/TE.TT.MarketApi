@@ -2,7 +2,7 @@
 
 namespace TE.TT.MarketApi.Model
 {
-    public class pagingDto
+    public class PagingDto
     {
         [JsonPropertyName("page")]
         public int Page { get; set; }

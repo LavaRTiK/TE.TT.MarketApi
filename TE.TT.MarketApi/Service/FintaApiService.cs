@@ -32,8 +32,8 @@ namespace TE.TT.MarketApi.Service
                 {
                     return new AssetsDto();
                 }
-                var result = JsonSerializer.Deserialize<pagingDto>(responseSize);
-                int dataCount = result.Items;
+                var result = JsonSerializer.Deserialize<TakePagingDto>(responseSize);
+                int dataCount = result.Paging.Items;
                 token = await _tokenService.GetValidToken();
                 if (string.IsNullOrWhiteSpace(token)) return new AssetsDto();
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);

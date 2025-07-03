@@ -51,18 +51,18 @@ namespace TE.TT.MarketApi.Repository
                             } : null,
                             UpdateData = DateTime.Now
                         } : null,
-                        Aplace = itemDto.Mappings?.Aplace != null ? new MappingAplace()
+                        Alpaca = itemDto.Mappings?.Alpaca != null ? new MappingAlpaca()
                         {
-                            Symbol = itemDto.Mappings.Aplace.Symbol,
-                            Exchange = itemDto.Mappings.Aplace.Exchange,
-                            DefualtOrderSize = itemDto.Mappings.Aplace.DefualtOrderSize,
-                            MaxOrderSize = itemDto.Mappings.Aplace.MaxOrderSize,
-                            TradingHours = itemDto.Mappings.Aplace.TradingHours != null ? new TradingHours
+                            Symbol = itemDto.Mappings.Alpaca.Symbol,
+                            Exchange = itemDto.Mappings.Alpaca.Exchange,
+                            DefualtOrderSize = itemDto.Mappings.Alpaca.DefualtOrderSize,
+                            MaxOrderSize = itemDto.Mappings.Alpaca.MaxOrderSize,
+                            TradingHours = itemDto.Mappings.Alpaca.TradingHours != null ? new TradingHours
                             {
-                                RegularStart = itemDto.Mappings.Aplace.TradingHours.RegularStart,
-                                RegularEnd = itemDto.Mappings.Aplace.TradingHours.RegularEnd,
-                                ElectronicStart = itemDto.Mappings.Aplace.TradingHours.ElectronicStart,
-                                ElectronicEnd = itemDto.Mappings.Aplace.TradingHours.ElectronicEnd,
+                                RegularStart = itemDto.Mappings.Alpaca.TradingHours.RegularStart,
+                                RegularEnd = itemDto.Mappings.Alpaca.TradingHours.RegularEnd,
+                                ElectronicStart = itemDto.Mappings.Alpaca.TradingHours.ElectronicStart,
+                                ElectronicEnd = itemDto.Mappings.Alpaca.TradingHours.ElectronicEnd,
                                 UpdateData = DateTime.Now
                             } : null,
                             UpdateData = DateTime.Now
@@ -106,7 +106,7 @@ namespace TE.TT.MarketApi.Repository
                             UpdateData = DateTime.Now,
                             Gics = itemDto.Profile.Gics != null ? new Gics
                             {
-                                SectorId = itemDto.Profile.Gics.SelectorId,
+                                SectorId = itemDto.Profile.Gics.SectorId,
                                 IndustryGroupId = itemDto.Profile.Gics.IndustryGrupID,
                                 IndustryId = itemDto.Profile.Gics.IndustryId,
                                 SubIndustryId = itemDto.Profile.Gics.SubIndustryId,
@@ -147,26 +147,26 @@ namespace TE.TT.MarketApi.Repository
                             asset.UpdateData = DateTime.Now;
                         }
                     }
-                    if (itemDto.Mappings.Aplace != null)
+                    if (itemDto.Mappings.Alpaca != null)
                     {
-                        if (asset.Aplace == null)
-                            asset.Aplace = new MappingAplace();
-                        asset.Aplace.Symbol = itemDto.Mappings.Aplace.Symbol;
-                        asset.Aplace.Exchange = itemDto.Mappings.Aplace.Exchange;
-                        asset.Aplace.DefualtOrderSize = itemDto.Mappings.Aplace.DefualtOrderSize;
+                        if (asset.Alpaca == null)
+                            asset.Alpaca = new MappingAlpaca();
+                        asset.Alpaca.Symbol = itemDto.Mappings.Alpaca.Symbol;
+                        asset.Alpaca.Exchange = itemDto.Mappings.Alpaca.Exchange;
+                        asset.Alpaca.DefualtOrderSize = itemDto.Mappings.Alpaca.DefualtOrderSize;
                         asset.UpdateData = DateTime.Now;
-                        if (itemDto.Mappings.Aplace.TradingHours != null)
+                        if (itemDto.Mappings.Alpaca.TradingHours != null)
                         {
-                            if (asset.Aplace.TradingHours == null)
-                                asset.Aplace.TradingHours = new TradingHours();
-                            asset.Aplace.TradingHours.RegularStart =
-                                itemDto.Mappings.Aplace.TradingHours.RegularStart;
-                            asset.Aplace.TradingHours.RegularEnd =
-                                itemDto.Mappings.Aplace.TradingHours.RegularEnd;
-                            asset.Aplace.TradingHours.ElectronicStart =
-                                itemDto.Mappings.Aplace.TradingHours.ElectronicStart;
-                            asset.Aplace.TradingHours.ElectronicEnd =
-                                itemDto.Mappings.Aplace.TradingHours.ElectronicEnd;
+                            if (asset.Alpaca.TradingHours == null)
+                                asset.Alpaca.TradingHours = new TradingHours();
+                            asset.Alpaca.TradingHours.RegularStart =
+                                itemDto.Mappings.Alpaca.TradingHours.RegularStart;
+                            asset.Alpaca.TradingHours.RegularEnd =
+                                itemDto.Mappings.Alpaca.TradingHours.RegularEnd;
+                            asset.Alpaca.TradingHours.ElectronicStart =
+                                itemDto.Mappings.Alpaca.TradingHours.ElectronicStart;
+                            asset.Alpaca.TradingHours.ElectronicEnd =
+                                itemDto.Mappings.Alpaca.TradingHours.ElectronicEnd;
                             asset.UpdateData = DateTime.Now;
                         }
                     }
@@ -228,7 +228,7 @@ namespace TE.TT.MarketApi.Repository
                         {
                             if (asset.Profile.Gics == null)
                                 asset.Profile.Gics = new Gics();
-                            asset.Profile.Gics.SectorId = itemDto.Profile.Gics.SelectorId;
+                            asset.Profile.Gics.SectorId = itemDto.Profile.Gics.SectorId;
                             asset.Profile.Gics.IndustryGroupId = itemDto.Profile.Gics.IndustryGrupID;
                             asset.Profile.Gics.IndustryId = itemDto.Profile.Gics.IndustryId;
                             asset.Profile.Gics.SubIndustryId = itemDto.Profile.Gics.SubIndustryId;

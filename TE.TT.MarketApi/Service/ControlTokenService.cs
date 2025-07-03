@@ -147,13 +147,13 @@ namespace TE.TT.MarketApi.Service
                         {
                             return "";
                         }
-
                         var content =
                             JsonSerializer.Deserialize<ResponseTokensDto>(await response.Content.ReadAsStringAsync());
                         _token = content.Token;
                         _tokenExpires = DateTime.Now.AddSeconds(content.TokenExpires);
                         _refreshToken = content.RefreshToken;
                         _refreshTokenExpires = DateTime.Now.AddSeconds(content.RefreshTokenExpires);
+                        await Console.Out.WriteLineAsync("Token:Update");
                     }
                     catch (Exception ex)
                     {
@@ -190,6 +190,7 @@ namespace TE.TT.MarketApi.Service
                         _tokenExpires = DateTime.Now.AddSeconds(content.TokenExpires);
                         _refreshToken = content.RefreshToken;
                         _refreshTokenExpires = DateTime.Now.AddSeconds(content.RefreshTokenExpires);
+                        await Console.Out.WriteLineAsync("Token:RefreshUpdate");
                     }
                     catch (Exception ex)
                     {

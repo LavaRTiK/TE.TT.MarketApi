@@ -8,9 +8,8 @@
         public string? Description { get; set; }
         public double? TickSize { get; set; }
         public string? Currency { get; set; }
-
         public MappingSimulation? Simulation { get; set; }
-        public MappingAplace? Aplace { get; set; }
+        public MappingAlpaca? Alpaca { get; set; }
         public MappingDxfeed? Dxfeed { get; set; }
         public MappingOanda? Oanda { get; set; }
         public Profile? Profile { get; set; }
@@ -26,7 +25,7 @@
         public AssetEntity? Asset { get; set; }
     }
     public class MappingSimulation : MappingBase { }
-    public class MappingAplace : MappingBase { }
+    public class MappingAlpaca : MappingBase { }
     public class MappingDxfeed : MappingBase { }
     public class MappingOanda : MappingBase { }
     public class TradingHours : BaseEntity

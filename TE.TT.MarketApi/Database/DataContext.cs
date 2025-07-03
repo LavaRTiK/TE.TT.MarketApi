@@ -20,16 +20,16 @@ namespace TE.TT.MarketApi.Database
                 .WithOne(g => g.Profile)
                 .HasForeignKey<Gics>(g => g.ProfileId);
 
-            // Маппинги — ранее описано
+            // Маппинги — ранее описано переделать
             modelBuilder.Entity<AssetEntity>()
                 .HasOne(a => a.Simulation)
                 .WithOne(m => m.Asset)
                 .HasForeignKey<MappingSimulation>(m => m.AssetId);
 
             modelBuilder.Entity<AssetEntity >()
-                .HasOne(a => a.Aplace)
+                .HasOne(a => a.Alpaca)
                 .WithOne(m => m.Asset)
-                .HasForeignKey<MappingAplace>(m => m.AssetId);
+                .HasForeignKey<MappingAlpaca>(m => m.AssetId);
 
             modelBuilder.Entity<AssetEntity>()
                 .HasOne(a => a.Dxfeed)

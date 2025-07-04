@@ -21,17 +21,16 @@ namespace TE.TT.MarketApi.Service
                 {
                     using (var scope = _service.CreateScope())
                     {
-                        var assetRepository = scope.ServiceProvider.GetRequiredService<IAssetRepositoryService>();
-                        var data = await _fintaApiService.FetchAllData();
-                        if (data != null && data.ListAssets != null)
-                        {
-                            await assetRepository.UpdateAssetRepository(data);
-                        }
-                        else
-                        {
-                            Console.WriteLine("BackService Data:null");
-                        }
-                        //await assetRepository.UpdateAssetRepository(data);
+                        //var assetRepository = scope.ServiceProvider.GetRequiredService<IAssetRepositoryService>();
+                        //var data = await _fintaApiService.FetchAllData();
+                        //if (data != null && data.ListAssets != null)
+                        //{
+                        //    //await assetRepository.UpdateAssetRepository(data);
+                        //}
+                        //else
+                        //{
+                        //    Console.WriteLine("BackService Data:null");
+                        //}
                     }
                     await Console.Out.WriteLineAsync("Update Database");
                 }

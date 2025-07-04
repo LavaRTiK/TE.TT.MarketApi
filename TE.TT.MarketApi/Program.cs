@@ -17,7 +17,7 @@ builder.Services.AddService();
 builder.Services.AddDbContext<DataContext>(opt => opt.UseMySql(builder.Configuration.GetValue<string>("Db"),
     ServerVersion.AutoDetect((builder.Configuration.GetValue<string>("Db")))));
 var app = builder.Build();
-
+//??????? ??? ????????? api ??? ????? ??????? ?????
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

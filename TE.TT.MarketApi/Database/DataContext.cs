@@ -7,9 +7,16 @@ namespace TE.TT.MarketApi.Database
     public class DataContext(DbContextOptions<DataContext> options) : DbContext(options)
     {
         public DbSet<AssetEntity> Assets { get; set; }
+        public DbSet<Provider> Providers { get; set; }
+        public DbSet<ExchangeEntity> Exchanges { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<ExchangeEntity>()
+                .HasOne(e => e.Provider)
+                .WithMany(p => p.Exchanges)
+                .HasForeignKey(e => e.ProviderId)
+                .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<AssetEntity>()
                 .HasOne(a => a.Profile)
                 .WithOne(p => p.Asset)

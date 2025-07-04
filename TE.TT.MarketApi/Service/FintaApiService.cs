@@ -53,8 +53,66 @@ namespace TE.TT.MarketApi.Service
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Ошибка в FetchAllData:" + ex.Message);
+                Console.WriteLine("Error in  FetchAllData:" + ex.Message);
                 return new AssetsDto();
+            }
+        }
+
+        public async Task<ProvidersDto> FetchDataProviders()
+        {
+            try
+            {
+                string token = await _tokenService.GetValidToken();
+                if (string.IsNullOrWhiteSpace(token))
+                {
+                    return new ProvidersDto();
+                }
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                var response = await _httpClient.GetStringAsync("providers");
+                if (string.IsNullOrWhiteSpace(response))
+                {
+                    return new ProvidersDto();
+                }
+                var responseData = JsonSerializer.Deserialize<ProvidersDto>(response);
+                if (responseData == null)
+                {
+                    return new ProvidersDto();
+                }
+                return responseData;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return new ProvidersDto();
+            }
+        }
+
+        public async Task<ExchangesDto> FetchDataExchanges()
+        {
+            try
+            {
+                string token = await _tokenService.GetValidToken();
+                if (string.IsNullOrWhiteSpace(token))
+                {
+                    return new ExchangesDto();
+                }
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                var response = await _httpClient.GetStringAsync("exchanges");
+                if (string.IsNullOrWhiteSpace(response))
+                {
+                    return new ExchangesDto();
+                }
+                var responseData = JsonSerializer.Deserialize<ExchangesDto>(response);
+                if (responseData == null)
+                {
+                    return new ExchangesDto();
+                }
+                return responseData;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return new ExchangesDto();
             }
         }
     }

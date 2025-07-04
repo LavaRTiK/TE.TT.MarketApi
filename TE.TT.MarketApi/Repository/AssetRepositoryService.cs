@@ -15,7 +15,6 @@ namespace TE.TT.MarketApi.Repository
         {
             _dataContext = dataContext;
         }
-
         public async Task<AssetEntity> GetAssetId(Guid id)
         {
             var asset = await _dataContext.Assets
@@ -28,6 +27,64 @@ namespace TE.TT.MarketApi.Repository
             return asset;
         }
 
+        public async Task UpdateExchange(ProvidersDto providersDto,ExchangesDto exchangesDto)
+        {
+            var providerNames = providersDto.Providers.Distinct().ToList();
+            //test
+            var providers = await _dataContext.Providers
+                .Where(p => providerNames.Contains(p.Name))
+                .ToListAsync();
+
+            var exchanges = await _dataContext.Exchanges
+                .Where(e => providerNames.Contains(e.Provider.Name))
+                .ToListAsync();
+            foreach (var provider in providers)
+            {
+                provider.Exchanges = exchanges.Where(e => e.ProviderId == provider.Id).ToList();
+            }
+            //test
+            var providerMap = providers.ToDictionary(p => p.Name, StringComparer.OrdinalIgnoreCase);
+            foreach (var item in providerNames)
+            {
+                if (!providerMap.ContainsKey(item))
+                {
+                    var provider = new Provider
+                    {
+                        UpdateData = DateTime.Now,
+                        Name = item,
+                        Exchanges = new List<ExchangeEntity>()
+                    };
+                    _dataContext.Providers.Add(provider);
+                    providerMap[item] = provider;
+                }
+                else
+                {
+                    providerMap[item].UpdateData = DateTime.Now;
+                }
+            }
+
+            Console.WriteLine("first half cool");
+
+            foreach (var item in exchangesDto.Exchanges)
+            {
+                if(!providerMap.TryGetValue(item.Key,out var provider)) continue;
+
+                var exchangeNames = item.Value
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .Distinct(StringComparer.OrdinalIgnoreCase);
+                foreach (var exchangeName in exchangeNames)
+                {
+                    if (!provider.Exchanges.Any(e => e.Name == exchangeName))
+                    {
+                        provider.Exchanges.Add(new ExchangeEntity()
+                        {
+                            Name = exchangeName,
+                        });
+                    }
+                }
+            }
+            await _dataContext.SaveChangesAsync();
+        }
         public async Task<IEnumerable<AssetEntity>> GetListEntity(bool viewMapping,bool viewTrading,bool viewGics,bool viewProfile,string kind, string symbol,int size,int paging)
         {
             var query = _dataContext.Assets.AsQueryable();
@@ -40,6 +97,8 @@ namespace TE.TT.MarketApi.Repository
             {
                 query = query.Where(x => x.Symbol.Contains(symbol));
             }
+
+            query = query.OrderBy(x => x.Symbol);
 
             query = query.Skip(paging)
                 .Take(size);

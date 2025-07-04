@@ -10,5 +10,6 @@ namespace TE.TT.MarketApi.Abstarct
         public Task<IEnumerable<AssetEntity>> GetListEntity(bool viewMapping, bool viewTrading, bool viewGics,
             bool viewProfile, string kind, string symbol, int size, int paging);
         public Task UpdateAssetRepository(AssetsDto assetsDto);
+        public  Task UpdateExchange(ProvidersDto providersDto, ExchangesDto exchangesDto);
     }
 }

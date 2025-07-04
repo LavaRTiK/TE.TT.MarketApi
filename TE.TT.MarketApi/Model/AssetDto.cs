@@ -1,5 +1,6 @@
 ﻿using System.Runtime;
 using System.Text.Json.Serialization;
+using Microsoft.VisualBasic;
 
 namespace TE.TT.MarketApi.Model
 {
@@ -23,6 +24,9 @@ namespace TE.TT.MarketApi.Model
         public MappingsDto? Mappings { get; set; }
         [JsonPropertyName("profile")]
         public ProfileDto? Profile { get; set; }
+        //reverseConvert
+        [JsonPropertyName("updateTime")]
+        public DateTime? UpdateTime { get; set; }
 
     }
 }

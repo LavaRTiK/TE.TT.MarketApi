@@ -5,6 +5,6 @@ namespace TE.TT.MarketApi.Abstarct
 {
     public interface IConvertDtoService
     {
-        public AssetDto ConvertEntityToDto(AssetEntity entity);
+        public AssetDto ConvertEntityToDto(AssetEntity entity, bool viewUpdate=true);
     }
 }

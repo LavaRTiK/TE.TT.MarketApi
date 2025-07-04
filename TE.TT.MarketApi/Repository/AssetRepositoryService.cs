@@ -14,6 +14,17 @@ namespace TE.TT.MarketApi.Repository
             _dataContext = dataContext;
         }
 
+        public async Task<AssetEntity> GetAssetId(Guid id)
+        {
+            var asset = await _dataContext.Assets
+                    .Include(x => x.Simulation).ThenInclude(m => m.TradingHours)
+                    .Include(x => x.Alpaca).ThenInclude(m => m.TradingHours)
+                    .Include(x => x.Dxfeed).ThenInclude(m => m.TradingHours)
+                    .Include(x => x.Oanda).ThenInclude(m => m.TradingHours)
+                    .Include(x => x.Profile).ThenInclude(p => p.Gics)
+                    .FirstOrDefaultAsync(a => a.Id == id);
+            return asset;
+        }
         public async Task UpdateAssetRepository(AssetsDto assetsDto)
         {
             //assset DtoObject 
@@ -22,6 +33,9 @@ namespace TE.TT.MarketApi.Repository
             {
                 var asset = await _dataContext.Assets
                     .Include(x => x.Simulation).ThenInclude(m => m.TradingHours)
+                    .Include(x => x.Alpaca).ThenInclude(m => m.TradingHours)
+                    .Include(x => x.Dxfeed).ThenInclude(m => m.TradingHours)
+                    .Include(x => x.Oanda).ThenInclude(m => m.TradingHours)
                     .Include(x => x.Profile).ThenInclude(p => p.Gics)
                     .FirstOrDefaultAsync(x => x.Symbol == itemDto.Symbol);
                 if (asset == null)

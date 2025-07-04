@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Drawing;
+using System.Net.NetworkInformation;
 using TE.TT.MarketApi.Abstarct;
 using TE.TT.MarketApi.Database;
 using TE.TT.MarketApi.Database.Entity;
@@ -24,6 +26,55 @@ namespace TE.TT.MarketApi.Repository
                     .Include(x => x.Profile).ThenInclude(p => p.Gics)
                     .FirstOrDefaultAsync(a => a.Id == id);
             return asset;
+        }
+
+        public async Task<IEnumerable<AssetEntity>> GetListEntity(bool viewMapping,bool viewTrading,bool viewGics,bool viewProfile,string kind, string symbol,int size,int paging)
+        {
+            var query = _dataContext.Assets.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(kind))
+            {
+                query = query.Where(x => x.Kind.Contains(kind));
+            }
+
+            if (!string.IsNullOrWhiteSpace(symbol))
+            {
+                query = query.Where(x => x.Symbol.Contains(symbol));
+            }
+
+            query = query.Skip(paging)
+                .Take(size);
+            if (viewMapping)
+            {
+                if (viewTrading)
+                {
+                    query = query.Include(x => x.Simulation).ThenInclude(m => m.TradingHours)
+                        .Include(x => x.Alpaca).ThenInclude(m => m.TradingHours)
+                        .Include(x => x.Dxfeed).ThenInclude(m => m.TradingHours)
+                        .Include(x => x.Oanda).ThenInclude(m => m.TradingHours);
+                }
+                else
+                {
+                    query = query.Include(x => x.Simulation)
+                        .Include(x => x.Alpaca)
+                        .Include(x => x.Dxfeed)
+                        .Include(x => x.Oanda);
+                }
+            }
+
+            if (viewProfile)
+            {
+                if (viewGics)
+                {
+                    query = query.Include(x => x.Profile).ThenInclude(p => p.Gics);
+                }
+                else
+                {
+                    query = query.Include(x => x.Profile);
+                }
+            }
+
+            var result = await query.ToListAsync();
+            return result;
         }
         public async Task UpdateAssetRepository(AssetsDto assetsDto)
         {

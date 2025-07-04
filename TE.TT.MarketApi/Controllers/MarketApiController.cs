@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using TE.TT.MarketApi.Abstarct;
 using TE.TT.MarketApi.Database.Entity;
 using TE.TT.MarketApi.Model;
@@ -21,6 +22,7 @@ namespace TE.TT.MarketApi.Controllers
         public ActionResult<IEnumerable<AssetDto>> Get([FromQuery] bool viewDataUpdate = false, [FromQuery] string kind = "",
             [FromQuery] string symbol = "", [FromQuery] int size = 10, [FromQuery] int paging = 0)
         {
+            var entity = _repositoryService.GetListEntity(viewDataUpdate,viewMapping,viewTrading,viewGics,viewProfile,kind,symbol,size,paging);
             return new List<AssetDto>();
         }
         [HttpGet("{id}")]

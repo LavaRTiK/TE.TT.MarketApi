@@ -6,23 +6,23 @@ namespace TE.TT.MarketApi.Model
     public class AssetDto
     {
         [JsonPropertyName("Id")]
-        public string Id { get; set; }
+        public string? Id { get; set; }
         [JsonPropertyName("symbol")]
-        public string Symbol { get; set; }
+        public string? Symbol { get; set; }
         [JsonPropertyName("kind")]
-        public string Kind { get; set; }
+        public string? Kind { get; set; }
         [JsonPropertyName("exchange")]
-        public string Exchange { get; set; }
+        public string? Exchange { get; set; }
         [JsonPropertyName("description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
         [JsonPropertyName("tickSize")]
-        public double TickSize { get; set; }
+        public double? TickSize { get; set; }
         [JsonPropertyName("currency")]
-        public string Currency { get; set; }
+        public string? Currency { get; set; }
         [JsonPropertyName("mappings")]
-        public MappingsDto Mappings { get; set; }
+        public MappingsDto? Mappings { get; set; }
         [JsonPropertyName("profile")]
-        public ProfileDto Profile { get; set; }
+        public ProfileDto? Profile { get; set; }
 
     }
 }

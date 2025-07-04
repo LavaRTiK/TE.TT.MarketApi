@@ -5,10 +5,10 @@ namespace TE.TT.MarketApi.Model
     public class ProfileDto
     {
         [JsonPropertyName("name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
         [JsonPropertyName("location")]
-        public string Location { get; set; }
+        public string? Location { get; set; }
         [JsonPropertyName("gics")]
-        public GicsDto Gics { get; set; }
+        public GicsDto? Gics { get; set; }
     }
 }

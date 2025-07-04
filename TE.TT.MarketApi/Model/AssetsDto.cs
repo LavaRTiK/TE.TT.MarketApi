@@ -6,6 +6,6 @@ namespace TE.TT.MarketApi.Model
     public class AssetsDto
     {
         [JsonPropertyName("data")]
-        public IEnumerable<AssetDto> ListAssets { get; set; }
+        public IEnumerable<AssetDto>? ListAssets { get; set; }
     }
 }

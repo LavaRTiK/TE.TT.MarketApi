@@ -16,6 +16,7 @@ namespace TE.TT.MarketApi.ExtensionMethods
             {
                 client.BaseAddress = new Uri("https://platform.fintacharts.com/api/instruments/v1/");
             });
+            service.AddScoped<IConvertDtoService, ConvertDtoService>();
             service.AddSingleton<IControlTokenService,ControlTokenService>();
             service.AddScoped<IAssetRepositoryService, AssetRepositoryService>();
             service.AddSingleton<IFintaApiService,FintaApiService>();

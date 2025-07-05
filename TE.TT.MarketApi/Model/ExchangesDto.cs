@@ -6,6 +6,8 @@ namespace TE.TT.MarketApi.Model
     public class ExchangesDto
     {
         [JsonPropertyName("data")]
-        public Dictionary<string, List<string>> Exchanges { get; set; }
+        public Dictionary<string, List<string>>? Exchanges { get; set; }
+        [JsonPropertyName("updateTime")]
+        public DateTime UpdateTime { get; set; }
     }
 }

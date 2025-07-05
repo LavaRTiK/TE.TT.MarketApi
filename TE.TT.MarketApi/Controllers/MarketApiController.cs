@@ -63,15 +63,43 @@ namespace TE.TT.MarketApi.Controllers
             return asstDto;
         }
         [HttpGet("providers")]
-        public ActionResult<List<string>> GetProviders()
+        public async Task<ActionResult<List<ProviderDto>>> GetProviders([FromQuery] bool viewDataUpdate = false)
         {
-            return new List<string>()
+            var provides = await _repositoryService.GetProviders();
+            if (provides == null || provides.Count() == 0)
             {
-                "alpaca",
-                "dxfeed",
-                "oanda",
-                "simulation"
-            };
+                return NotFound();
+            }
+            List<ProviderDto> providersDto = new List<ProviderDto>();
+            foreach (var item in provides)
+            {
+                var provideCon = _convertDtoService.ConvertEnrirtyToDtoProvider(item, viewDataUpdate);
+                if (provideCon is null)
+                {
+                    return BadRequest();
+                }
+                providersDto.Add(provideCon);
+
+            }
+            return providersDto;
+        }
+
+        [HttpGet("exchanges")]
+        public async Task<ActionResult<ExchangesDto>> GetExchanges([FromQuery] string provide = "")
+        {
+            var exchgange = await _repositoryService.GetProviderExchangeList(provide);
+            if (exchgange is null || exchgange.Count() == 0)
+            {
+                return NotFound();
+            }
+            Console.WriteLine("test");
+            var exDto = _convertDtoService.ConvertEnitytoDtoProviderExchangeList(exchgange);
+            if (exDto is null || exDto.Exchanges.Count == 0)
+            {
+                return BadRequest();
+            }
+
+            return exDto;
         }
     }
 }

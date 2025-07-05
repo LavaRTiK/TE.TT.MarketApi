@@ -31,15 +31,15 @@ namespace TE.TT.MarketApi.Service
                         //{
                         //    Console.WriteLine("BackService Data:null");
                         //}
-                        var dataProvide  =await _fintaApiService.FetchDataProviders();
-                        if (dataProvide != null)
-                        {
-                            var dataExchange =await _fintaApiService.FetchDataExchanges();
-                            if (dataExchange != null)
-                            {
-                                await assetRepository.UpdateExchange(dataProvide,dataExchange);
-                            }
-                        }
+                        //var dataProvide  =await _fintaApiService.FetchDataProviders();
+                        //if (dataProvide != null)
+                        //{
+                        //    var dataExchange =await _fintaApiService.FetchDataExchanges();
+                        //    if (dataExchange != null)
+                        //    {
+                        //        await assetRepository.UpdateExchange(dataProvide,dataExchange);
+                        //    }
+                        //}
                     }
                     await Console.Out.WriteLineAsync("Update Database");
                 }

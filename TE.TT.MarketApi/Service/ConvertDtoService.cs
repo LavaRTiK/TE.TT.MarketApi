@@ -16,6 +16,41 @@ namespace TE.TT.MarketApi.Service
             return new AssetEntity();
         }
 
+        public ProviderDto ConvertEnrirtyToDtoProvider(Provider entity,bool viewDataUpdate)
+        {
+            if (entity is null)
+            {
+                throw new Exception("Convert null entity");
+            }
+
+            ProviderDto provider = new ProviderDto
+            {
+                Name = entity.Name,
+                UpdateTime = viewDataUpdate ? entity.UpdateData : null
+            };
+            return provider;
+        }
+
+        public ExchangesDto ConvertEnitytoDtoProviderExchangeList(IEnumerable<Provider> entitys)
+        {
+            if (entitys is null)
+            {
+                throw new Exception("Convert null entity Exchange");
+            }
+
+            ExchangesDto exchanges = new ExchangesDto
+            {
+                Exchanges = new Dictionary<string, List<string>>()
+            };
+            foreach (var item in entitys)
+            {
+                exchanges.Exchanges.Add(item.Name,item.Exchanges.Select(x => x.Name).ToList());
+                exchanges.UpdateTime = item.UpdateData;
+
+            }
+            return exchanges;
+
+        }
         public AssetDto ConvertEntityToDto(AssetEntity entity, bool viewUpdate = true)
         {
             if (entity is null)

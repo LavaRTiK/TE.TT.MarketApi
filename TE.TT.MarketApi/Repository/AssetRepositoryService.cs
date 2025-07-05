@@ -15,6 +15,31 @@ namespace TE.TT.MarketApi.Repository
         {
             _dataContext = dataContext;
         }
+
+        public async Task<IEnumerable<Provider>> GetProviderExchangeList(string provide)
+        {
+            var query = _dataContext.Providers.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(provide))
+            {
+                query = query.Where(x => x.Name.Contains(provide));
+            }
+            var exchange = await query.Include(x => x.Exchanges).ToListAsync();
+            if (exchange == null)
+            {
+                return new List<Provider>();
+            }
+
+            return exchange;
+        }
+        public async Task<IEnumerable<Provider>> GetProviders()
+        {
+            var provides = await _dataContext.Providers.ToListAsync();
+            if (provides == null)
+            {
+                return new List<Provider>();
+            }
+            return provides;
+        }
         public async Task<AssetEntity> GetAssetId(Guid id)
         {
             var asset = await _dataContext.Assets

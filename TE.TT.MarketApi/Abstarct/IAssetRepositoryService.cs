@@ -11,5 +11,7 @@ namespace TE.TT.MarketApi.Abstarct
             bool viewProfile, string kind, string symbol, int size, int paging);
         public Task UpdateAssetRepository(AssetsDto assetsDto);
         public  Task UpdateExchange(ProvidersDto providersDto, ExchangesDto exchangesDto);
+        public Task<IEnumerable<Provider>> GetProviders();
+        public  Task<IEnumerable<Provider>> GetProviderExchangeList(string provide);
     }
 }

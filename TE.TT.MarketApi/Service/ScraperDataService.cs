@@ -39,6 +39,14 @@ namespace TE.TT.MarketApi.Service
                             {
                                 await assetRepository.UpdateExchange(dataProvide, dataExchange);
                             }
+                            else
+                            {
+                                Console.WriteLine("Error:scraper null or fiall dataExchange");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Error:scraper null or fail dataProvide");
                         }
                     }
                     await Console.Out.WriteLineAsync("Update Database");

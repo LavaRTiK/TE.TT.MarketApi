@@ -32,10 +32,10 @@ namespace TE.TT.MarketApi.Service
                             Console.WriteLine("BackService Data:null");
                         }
                         var dataProvide = await _fintaApiService.FetchDataProviders();
-                        if (dataProvide != null)
+                        if (dataProvide != null || dataProvide.Providers != null || dataProvide.Providers.Count != 0)
                         {
                             var dataExchange = await _fintaApiService.FetchDataExchanges();
-                            if (dataExchange != null)
+                            if (dataExchange != null || dataExchange.Exchanges != null || dataExchange.Exchanges.Count != 0)
                             {
                                 await assetRepository.UpdateExchange(dataProvide, dataExchange);
                             }

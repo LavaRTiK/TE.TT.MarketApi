@@ -65,6 +65,7 @@ namespace TE.TT.MarketApi.Service
                 string token = await _tokenService.GetValidToken();
                 if (string.IsNullOrWhiteSpace(token))
                 {
+                    Console.WriteLine("Error provide token null");
                     return new ProvidersDto();
                 }
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -82,7 +83,7 @@ namespace TE.TT.MarketApi.Service
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Console.WriteLine("Fecth provide"+ e);
                 return new ProvidersDto();
             }
         }
@@ -111,7 +112,7 @@ namespace TE.TT.MarketApi.Service
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Console.WriteLine("Error  FetchData" + e);
                 return new ExchangesDto();
             }
         }

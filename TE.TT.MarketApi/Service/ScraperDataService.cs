@@ -22,24 +22,24 @@ namespace TE.TT.MarketApi.Service
                     using (var scope = _service.CreateScope())
                     {
                         var assetRepository = scope.ServiceProvider.GetRequiredService<IAssetRepositoryService>();
-                        //var data = await _fintaApiService.FetchAllData();
-                        //if (data != null && data.ListAssets != null)
-                        //{
-                        //    //await assetRepository.UpdateAssetRepository(data);
-                        //}
-                        //else
-                        //{
-                        //    Console.WriteLine("BackService Data:null");
-                        //}
-                        //var dataProvide  =await _fintaApiService.FetchDataProviders();
-                        //if (dataProvide != null)
-                        //{
-                        //    var dataExchange =await _fintaApiService.FetchDataExchanges();
-                        //    if (dataExchange != null)
-                        //    {
-                        //        await assetRepository.UpdateExchange(dataProvide,dataExchange);
-                        //    }
-                        //}
+                        var data = await _fintaApiService.FetchAllData();
+                        if (data != null && data.ListAssets != null)
+                        {
+                            //await assetRepository.UpdateAssetRepository(data);
+                        }
+                        else
+                        {
+                            Console.WriteLine("BackService Data:null");
+                        }
+                        var dataProvide = await _fintaApiService.FetchDataProviders();
+                        if (dataProvide != null)
+                        {
+                            var dataExchange = await _fintaApiService.FetchDataExchanges();
+                            if (dataExchange != null)
+                            {
+                                await assetRepository.UpdateExchange(dataProvide, dataExchange);
+                            }
+                        }
                     }
                     await Console.Out.WriteLineAsync("Update Database");
                 }

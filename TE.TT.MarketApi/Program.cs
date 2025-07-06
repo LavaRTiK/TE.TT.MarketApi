@@ -19,12 +19,15 @@ builder.Services.AddDbContext<DataContext>(opt => opt.UseMySql(builder.Configura
 var app = builder.Build();
 //??????? ??? ????????? api ??? ????? ??????? ?????
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-    app.MapOpenApi();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
+app.MapOpenApi();
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI();
+//    app.MapOpenApi();
+//}
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

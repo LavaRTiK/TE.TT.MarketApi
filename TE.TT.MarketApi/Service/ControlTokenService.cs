@@ -136,7 +136,7 @@ namespace TE.TT.MarketApi.Service
                     {
                         var requstData = new Dictionary<string, string>()
                         {
-                            {"grand_type","password"},
+                            {"grant_type","password"},
                             {"client_id","app-cli"},
                             {"username",_username},
                             {"password",_password}
@@ -145,6 +145,7 @@ namespace TE.TT.MarketApi.Service
                         var response = await _httpClient.PostAsync("", contentData);
                         if (!response.IsSuccessStatusCode)
                         {
+                            Console.WriteLine($"refresh token update error:{response.StatusCode}:" + await response.Content.ReadAsStringAsync());
                             return "";
                         }
                         var content =
@@ -173,7 +174,7 @@ namespace TE.TT.MarketApi.Service
                         //};
                         var requstData = new Dictionary<string, string>()
                         {
-                            {"grand_type","refresh_token"},
+                            {"grant_type","refresh_token"},
                             {"client_id","app-cli"},
                             {"refresh_token",_refreshToken}
 
@@ -182,6 +183,7 @@ namespace TE.TT.MarketApi.Service
                         var response = await _httpClient.PostAsync("", contentData);
                         if (!response.IsSuccessStatusCode)
                         {
+                            Console.WriteLine($"token update error:{response.StatusCode}:" + await response.Content.ReadAsStringAsync());
                             return "";
                         }
                         var content =

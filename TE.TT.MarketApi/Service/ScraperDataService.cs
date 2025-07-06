@@ -25,7 +25,7 @@ namespace TE.TT.MarketApi.Service
                         var data = await _fintaApiService.FetchAllData();
                         if (data != null && data.ListAssets != null)
                         {
-                            //await assetRepository.UpdateAssetRepository(data);
+                            await assetRepository.UpdateAssetRepository(data);
                         }
                         else
                         {
